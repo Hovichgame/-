@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер с настройками фона</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Верхняя левая часть (количество нажатий и спидометр) -->
+    <div class="top-container">
+        <div class="stats">
+            <span>Количество нажатий: <span id="click-count">0</span></span>
+        </div>
+
+        <!-- Спидометр -->
+        <div class="speedometer">
+            <div id="needle" class="needle"></div>
+        </div>
+    </div>
+
+    <!-- Кнопка в центре -->
+    <button class="clicker-button" id="clicker-btn"></button>
+
+    <!-- Правая верхняя часть (достижения) -->
+    <div class="right-container">
+        <div class="achievements" id="achievements">
+            <span>Достижения:</span>
+            <ul id="achievements-list"></ul>
+        </div>
+    </div>
+
+    <!-- Всплывающее окно для выбора фона -->
+    <div class="background-selector" id="background-selector">
+        <div class="color-option background1" onclick="changeBackground('background1')"></div>
+        <div class="color-option background2" onclick="changeBackground('background2')"></div>
+        <div class="color-option background3" onclick="changeBackground('background3')"></div>
+    </div>
+
+    <!-- Кнопка для изменения цвета кнопки -->
+    <button class="color-change-button" id="change-button-color">Изменить цвет кнопки</button>
+
+    <!-- Кнопка для открытия настроек фона -->
+    <button class="settings-button" id="open-background-settings">Изменить фон</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
