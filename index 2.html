@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер с настройками фона</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #6a11cb, #2575fc, #ff7b00);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .achievements {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            width: 250px;
+            margin-bottom: 10px;
+        }
+
+        .speedometer {
+            width: 300px;
+            height: 50px;
+            position: relative;
+            background: linear-gradient(90deg, green, orange, red);
+            border-radius: 25px;
+            border: 3px solid #fff;
+            margin-top: 10px;
+        }
+
+        .needle {
+            width: 6px;
+            height: 40px;
+            background-color: #333;
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform-origin: bottom center;
+            transition: transform 0.5s ease-out;
+        }
+
+        .clicker-button {
+            background-color: #3498db;
+            border: none;
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+            margin-top: 20px;
+            animation: buttonPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes buttonPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .clicker-button:hover {
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.8);
+            filter: brightness(1.3);
+        }
+
+        .clicker-button:active {
+            transform: scale(0.95);
+        }
+
+        .right-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .bottom-container {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: space-evenly;
+            padding: 20px;
+        }
+
+        .color-option {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            border: 2px solid #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .background1 {
+            background: linear-gradient(45deg, #6a11cb, #2575fc, #ff7b00);
+        }
+
+        .background2 {
+            background: linear-gradient(45deg, #ff7b00, #ff00ff, #ff0000);
+        }
+
+        .background3 {
+            background: linear-gradient(45deg, #00ff00, #0000ff, #ffff00);
+        }
+
+        /* Всплывающее окно с фонами */
+        .background-selector {
+         position: absolute;
+         bottom: 20px;  /* Отступ от нижнего края */
+         right: 20px;   /* Отступ от правого края */
+         display: none;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         background-color: rgba(255, 255, 255, 0.9);
+         padding: 20px;
+         border-radius: 10px;
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .background-selector.show {
+            display: flex;
+        }
+
+        /* Кнопка для открытия всплывающего окна с фонами */
+        .settings-button {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: #3498db;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+        }
+
+        .settings-button:hover {
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.8);
+            filter: brightness(1.3);
+        }
+
+        .settings-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Кнопка для изменения цвета кнопки */
+        .color-change-button {
+            position: absolute;
+            bottom: 90px;
+            left: 20px;
+            background-color: #3498db;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+        }
+
+        .color-change-button:hover {
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.8);
+            filter: brightness(1.3);
+        }
+
+        .color-change-button:active {
+            transform: scale(0.95);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Верхняя левая часть (количество нажатий и спидометр) -->
+    <div class="top-container">
+        <div class="stats">
+            <span>Количество нажатий: <span id="click-count">0</span></span>
+        </div>
+
+        <!-- Спидометр -->
+        <div class="speedometer">
+            <div id="needle" class="needle"></div>
+        </div>
+    </div>
+
+    <!-- Кнопка в центре -->
+    <button class="clicker-button" id="clicker-btn"></button>
+
+    <!-- Правая верхняя часть (достижения) -->
+    <div class="right-container">
+        <div class="achievements" id="achievements">
+            <span>Достижения:</span>
+            <ul id="achievements-list"></ul>
+        </div>
+    </div>
+
+    <!-- Всплывающее окно для выбора фона -->
+    <div class="background-selector" id="background-selector">
+        <div class="color-option background1" onclick="changeBackground('background1')"></div>
+        <div class="color-option background2" onclick="changeBackground('background2')"></div>
+        <div class="color-option background3" onclick="changeBackground('background3')"></div>
+    </div>
+
+    <!-- Кнопка для изменения цвета кнопки -->
+    <button class="color-change-button" id="change-button-color">Изменить цвет кнопки</button>
+
+    <!-- Кнопка для открытия настроек фона -->
+    <button class="settings-button" id="open-background-settings">Изменить фон</button>
+
+    <script>
+        const clickerButton = document.getElementById('clicker-btn');
+        const clickCountElement = document.getElementById('click-count');
+        const needle = document.getElementById('needle');
+        const achievementsList = document.getElementById('achievements-list');
+        const body = document.querySelector('body');
+        const backgroundSelector = document.getElementById('background-selector');
+        const openBackgroundSettingsButton = document.getElementById('open-background-settings');
+        const colorChangeButton = document.getElementById('change-button-color');
+
+        let clickCount = 0;
+        let speed = 0;
+        let lastClickTime = 0;
+        let previousTime = Date.now();
+
+        const achievements = {
+            "Сотник 😁!": 100,
+            "Половинка гепарда 🐆": 1000000,
+            "Пятисот раз 😆": 500,
+            "Тысяча баллов!": 1000,
+            "Черепаха 🐢": 1,
+            "Челик 🎩": 777,
+            "на еду" : 67,
+        };
+
+        function updateSpeedometer() {
+            const currentTime = Date.now();
+            const timeDiff = currentTime - previousTime;
+            speed = timeDiff > 0 ? Math.min(Math.round(1000 / timeDiff), 10) : 0;
+            previousTime = currentTime;
+
+            needle.style.transform = `rotate(${speed * 18 - 90}deg)`;
+        }
+
+        function updateAchievements() {
+            for (let achievement in achievements) {
+                if (clickCount >= achievements[achievement]) {
+                    if (!document.getElementById(achievement)) {
+                        let li = document.createElement('li');
+                        li.id = achievement;
+                        li.textContent = achievement;
+                        achievementsList.appendChild(li);
+                    }
+                }
+            }
+        }
+
+        // Обработчик событий для кликов мышью и касаний
+        const clickHandler = () => {
+            clickCount++;
+            clickCountElement.textContent = clickCount;
+
+            updateSpeedometer();
+            updateAchievements();
+        };
+
+        // Добавляем обработчики как для кликов, так и для касаний
+        clickerButton.addEventListener('click', clickHandler);
+        clickerButton.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Предотвращаем дополнительное событие "tap"
+            clickHandler();
+        });
+
+        openBackgroundSettingsButton.addEventListener('click', () => {
+            backgroundSelector.classList.toggle('show');
+        });
+
+        colorChangeButton.addEventListener('click', () => {
+            const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
+            clickerButton.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        });
+
+        function changeBackground(backgroundClass) {
+            body.className = ''; // Очистить текущий класс
+            body.classList.add(backgroundClass);
+            backgroundSelector.classList.remove('show');
+        }
+    </script>
+
+</body>
+</html>
